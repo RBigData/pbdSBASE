@@ -22,9 +22,10 @@ PKG_LIBS = $(SLAP_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS)
 
 ### Setup R source code and objects.
 R_OBJS = \
-petsc_init.o \
-petsc_printing.o \
-petsc_test.o
+    petsc_converters.o \
+    petsc_init.o \
+    petsc_printing.o \
+    petsc_test.o
 
 
 OBJECTS = $(R_OBJS)
