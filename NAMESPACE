@@ -1,0 +1,7 @@
+useDynLib(pbdSBASE)
+
+import(methods, rlecuyer, pbdMPI, pbdSLAP)
+
+# All internal functions
+exportPattern("^[[:alpha:]]+")
+
