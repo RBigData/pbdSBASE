@@ -1,9 +1,8 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* This Source Code Form is subject to the terms of the BSD 2-Clause
+ * License. If a copy of the this license was not distributed with this
+ * file, you can obtain one from http://opensource.org/licenses/BSD-2-Clause. */
 
 // Copyright 2013, Schmidt
-
 
 
 #include "sbase.h"
