@@ -9,7 +9,6 @@ export PETSC_ARCH=
 
 
 ### Configurations.
-SLAP_LDFLAGS = /home/mschmid3/R/x86_64-pc-linux-gnu-library/3.0/pbdSLAP/lib/libslap.a $(LAPACK_LIBS) $(BLAS_LIBS)
 SPMD_CPPFLAGS = -I/usr/lib/openmpi/include  -DMPI2 -DOPENMPI
 SPMD_LDFLAGS = -L/usr/lib/openmpi/lib -lmpi  -lutil -lpthread -lpetsc
 
