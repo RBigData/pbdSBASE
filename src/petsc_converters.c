@@ -10,17 +10,48 @@
 
 #include <stdlib.h>
 
+#include <SEXPtools.h>
 
-// Convert petsc AIJ storage to R storage
-SEXP sbase_convert_r_to_petsc(SEXP x)
+
+// Convert R storage to PETSc MPIAIJ storage
+#if 0
+SEXP sbase_convert_r_to_petsc(SEXP x, SEXP dim)
 {
-  Mat mat;
+  Mat                 mat;
+  PetscErrorCode      ierr;
+  const int           m = nrow(x), n = ncol(x);
+  const int           M = INTEGER(dim)[0], N = INTEGER(dim)[1];
+  
+  
+  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);
+  ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);
+  
+  ierr = MatSetSizes(mat, m, n, N, M);CHKERRQ(ierr);
+  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);
+  
+/*  ierr = MatMPIAIJSetPreallocation(mat, PetscInt d_nz,const PetscInt d_nnz[],PetscInt o_nz,const PetscInt o_nnz[]);*/
+  
+  ierr = MatSetUp(mat);CHKERRQ(ierr);
+  ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);
+  for (i=rstart; i<rend; i+=2) {
+    for (j=0; j<n; j+=2) {
+      v = 10.0*i+j;
+      ierr = MatSetValues(mat,1,&i,1,&j,&v,INSERT_VALUES);CHKERRQ(ierr);
+    }
+  }
+  ierr = MatAssemblyBegin(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
+  ierr = MatAssemblyEnd(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
+  
+  
+  
+  
   
   return mat;
 }
+#endif
 
 
-// Convert petsc AIJ storage to R storage
+// Convert PETSc MPIAIJ storage to R storage
 PetscErrorCode sbase_convert_petsc_to_r_data(Mat mat, SEXP *R_data, SEXP *R_data_rows, SEXP *R_data_cols)
 {
   Mat                 mat_local;
@@ -99,11 +130,13 @@ PetscErrorCode sbase_convert_petsc_to_r_data(Mat mat, SEXP *R_data, SEXP *R_data
 SEXP sbase_convert_petsc_to_r(Mat mat)
 {
   SEXP R_data, R_data_rows, R_data_cols;
-  SEXP R_list;
+  SEXP R_list, R_list_names;
   
 /*  MatView(mat,PETSC_VIEWER_STDOUT_WORLD);*/
   
   sbase_convert_petsc_to_r_data(mat, &R_data, &R_data_rows, &R_data_cols);
+  
+  PRINT(R_data);
   
   return R_data_rows;
 /*  return R_data;*/

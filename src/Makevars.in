@@ -3,35 +3,40 @@ export PETSC_DIR=/usr/lib/petsc
 export PETSC_ARCH=
 #export PETSC_DIR=/home/mschmid3/Downloads/petsc-3.4.2/linux
 #export PETSC_ARCH=linux
-
 #include ${PETSC_DIR}/conf/variables
 #include ${PETSC_DIR}/conf/rules
 
 
-### Configurations.
-SPMD_CPPFLAGS = -I/usr/lib/openmpi/include  -DMPI2 -DOPENMPI
-SPMD_LDFLAGS = -L/usr/lib/openmpi/lib -lmpi  -lutil -lpthread -lpetsc
+### Configuration
+SEXPTOOLS_LDFLAGS = @SEXPTOOLS_LDFLAGS@
+
+SPMD_CPPFLAGS = @SPMD_CPPFLAGS@
+SPMD_LDFLAGS = @SPMD_LDFLAGS@ -lpetsc
+
 
 ### Setup R package flags and substitute by configure for ${MPI_...}.
-PKG_CPPFLAGS = $(SPMD_CPPFLAGS) -I${PETSC_DIR}/include
+PKG_CPPFLAGS = $(SPMD_CPPFLAGS) -I${PETSC_DIR}/include \
+		-I/${HOME}/R/x86_64-pc-linux-gnu-library/3.0/SEXPtools/include
 PKG_CFLAGS = -w
 PKG_FFLAGS = $(SAFE_FFLAGS) -w 
-### Order is matter.
-PKG_LIBS = $(SLAP_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS)
+PKG_LIBS = $(SEXPTOOLS_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS)
+
 
 ### Setup R source code and objects.
 R_OBJS = \
-    petsc_converters.o \
-    petsc_init.o \
-    petsc_printing.o \
-    petsc_test.o
+	petsc_converters.o \
+	petsc_init.o \
+	petsc_printing.o \
+	petsc_test.o
 
 
 OBJECTS = $(R_OBJS)
 
+
 ### For user configuration.
 USER_CONF = Makeconf
- 
+
+
 ### Start making here.
 all: $(SHLIB)
 	@echo "SLAP_LDFLAGS = $(SLAP_LDFLAGS)" > $(USER_CONF)
@@ -46,4 +51,4 @@ $(SHLIB): $(OBJECTS)
 
 clean:
 	@rm -rf *.o *.d *.rc *.so *.dylib *.dll *.a *.lib \
-                Makedeps Makevars $(USER_CONF) $(SHLIB) $(OBJECTS) \
+					Makedeps Makevars $(USER_CONF) $(SHLIB) $(OBJECTS) \

@@ -10,5 +10,10 @@
 
 SEXP sbase_petsc_matmatmult(SEXP x, SEXP y)
 {
+  Mat mat;
+/*  mat = sbase_convert_r_to_petsc()*/
   
+/*  ierr = MatMatMult(Mat A,Mat B,MatReuse scall,PetscReal fill,Mat *C);*/
+  
+/*  sbase_convert_petsc_to_r(mat)*/
 }
