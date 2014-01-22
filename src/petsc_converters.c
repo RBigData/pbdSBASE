@@ -51,7 +51,10 @@ SEXP sbase_convert_r_to_petsc(SEXP x, SEXP dim)
 #endif
 
 
+// ----------------------------------------------------
 // Convert PETSc MPIAIJ storage to R storage
+// ----------------------------------------------------
+
 PetscErrorCode sbase_convert_petsc_to_r_data(Mat mat, SEXP *R_data, SEXP *R_data_rows, SEXP *R_data_cols)
 {
   Mat                 mat_local;
@@ -104,9 +107,9 @@ PetscErrorCode sbase_convert_petsc_to_r_data(Mat mat, SEXP *R_data, SEXP *R_data
   
   ierr = MatGetRowIJ(mat_local, 1, shift, symmetric, &n, &ia, &ja, &get_row_check);CHKERRQ(ierr);
   
-  PROTECT(*R_data_rows = allocVector(INTSXP, n));
+  PROTECT(*R_data_rows = allocVector(INTSXP, n+1));
   
-  for (i=0; i<n; i++)
+  for (i=0; i<=n; i++)
     INTEGER(*R_data_rows)[i] = ia[i];
   
   PROTECT(*R_data_cols = allocVector(INTSXP, len));

@@ -17,7 +17,7 @@ SEXP sbase_petsc_test()
   MatInfo info;
   Mat            mat;
   MatScalar      *a;
-  PetscInt       m = 7,n,i,j,rstart,rend,rect = 0;
+  PetscInt       m,n,i,j,rstart,rend,rect = 0;
   PetscErrorCode ierr;
   PetscMPIInt    size, rank;
   PetscBool      flg;
@@ -43,6 +43,7 @@ SEXP sbase_petsc_test()
   ierr = MPI_Comm_rank(PETSC_COMM_WORLD,&rank);CHKERRQ(ierr);
   ierr = MPI_Comm_size(PETSC_COMM_WORLD,&size);CHKERRQ(ierr);
   
+  m = 8;
   n = m;
   
   ierr = PetscOptionsHasName(NULL,"-rectA",&flg);CHKERRQ(ierr);
@@ -59,8 +60,10 @@ SEXP sbase_petsc_test()
   ierr = MatSetFromOptions(mat);CHKERRQ(ierr);
   ierr = MatSetUp(mat);CHKERRQ(ierr);
   ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);
-  for (i=rstart; i<rend; i+=2) {
-    for (j=0; j<n; j+=2) {
+  for (i=rstart; i<rend; i+=2) 
+  {
+    for (j=0; j<n; j+=2) 
+    {
       v    = 10.0*i+j;
       ierr = MatSetValues(mat,1,&i,1,&j,&v,INSERT_VALUES);CHKERRQ(ierr);
     }
@@ -72,7 +75,7 @@ SEXP sbase_petsc_test()
   
   
   // Print matrix with petsc printer
-/*  ierr  = MatView(mat,PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);*/
+  ierr  = MatView(mat,PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);
   
   
   
