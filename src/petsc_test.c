@@ -43,8 +43,6 @@ SEXP sbase_petsc_test()
   ierr = MPI_Comm_rank(PETSC_COMM_WORLD,&rank);CHKERRQ(ierr);
   ierr = MPI_Comm_size(PETSC_COMM_WORLD,&size);CHKERRQ(ierr);
   
-  printf("%d\n", size);
-  
   n = m;
   
   ierr = PetscOptionsHasName(NULL,"-rectA",&flg);CHKERRQ(ierr);
@@ -105,8 +103,6 @@ SEXP sbase_petsc_test()
 
 /*  ierr = PetscFinalize();*/
   
-  
-  UNPROTECT(1);
   return dense_mat;
 }
 
