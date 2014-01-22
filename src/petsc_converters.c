@@ -136,9 +136,10 @@ SEXP sbase_convert_petsc_to_r(Mat mat)
   
   sbase_convert_petsc_to_r_data(mat, &R_data, &R_data_rows, &R_data_cols);
   
-  PRINT(R_data);
+  R_list_names = make_list_names(3, "Data", "rows", "cols");
+  R_list = make_list(R_list_names, R_data, R_data_rows, R_data_cols);
   
-  return R_data_rows;
+  return R_list;
 /*  return R_data;*/
 }
 
