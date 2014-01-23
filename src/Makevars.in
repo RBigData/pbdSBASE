@@ -31,18 +31,9 @@ R_OBJS = \
 OBJECTS = $(R_OBJS)
 
 
-### For user configuration.
-USER_CONF = Makeconf
-
 
 ### Start making here.
 all: $(SHLIB)
-	@echo "SPMD_CPPFLAGS = $(SPMD_CPPFLAGS)" >> $(USER_CONF)
-	@echo "SPMD_LDFLAGS = $(SPMD_LDFLAGS)" >> $(USER_CONF)
-	@echo "PKG_CPPFLAGS = $(PKG_CPPFLAGS)" >> $(USER_CONF)
-	@echo "PKG_CFLAGS = $(PKG_CFLAGS)" >> $(USER_CONF)
-	@echo "PKG_FFLAGS = $(PKG_FFLAGS)" >> $(USER_CONF)
-	@echo "PKG_LIBS = $(PKG_LIBS)" >> $(USER_CONF)
 
 $(SHLIB): $(OBJECTS)
 
