@@ -1,6 +1,6 @@
 ### PETSc stuff
-export PETSC_DIR=/usr/lib/petsc
-export PETSC_ARCH=
+#export PETSC_DIR=/usr/lib/petsc
+#export PETSC_ARCH=
 #export PETSC_DIR=/home/mschmid3/Downloads/petsc-3.4.2/linux
 #export PETSC_ARCH=linux
 #include ${PETSC_DIR}/conf/variables
@@ -8,15 +8,20 @@ export PETSC_ARCH=
 
 
 ### Configuration
+SEXPTOOLS_CPPFLAGS = @SEXPTOOLS_CPPFLAGS@
 SEXPTOOLS_LDFLAGS = @SEXPTOOLS_LDFLAGS@
 
 SPMD_CPPFLAGS = @SPMD_CPPFLAGS@
 SPMD_LDFLAGS = @SPMD_LDFLAGS@ -lpetsc
 
+PETSC_DIR=@PETSC_DIR@
+PETSC_ARCH=@PETSC_ARCH@
 
-### Setup R package flags and substitute by configure for ${MPI_...}.
-PKG_CPPFLAGS = $(SPMD_CPPFLAGS) -I${PETSC_DIR}/include \
-		-I/${HOME}/R/x86_64-pc-linux-gnu-library/3.0/SEXPtools/include
+PETSC_CPPFLAGS="-I${PETSC_DIR}/include"
+
+
+### R package flags
+PKG_CPPFLAGS = $(SPMD_CPPFLAGS) $(SEXPTOOLS_CPPFLAGS) $(PETSC_CPPFLAGS)
 PKG_CFLAGS = -w
 PKG_FFLAGS = $(SAFE_FFLAGS) -w 
 PKG_LIBS = $(SEXPTOOLS_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS)
@@ -39,7 +44,6 @@ USER_CONF = Makeconf
 
 ### Start making here.
 all: $(SHLIB)
-	@echo "SLAP_LDFLAGS = $(SLAP_LDFLAGS)" > $(USER_CONF)
 	@echo "SPMD_CPPFLAGS = $(SPMD_CPPFLAGS)" >> $(USER_CONF)
 	@echo "SPMD_LDFLAGS = $(SPMD_LDFLAGS)" >> $(USER_CONF)
 	@echo "PKG_CPPFLAGS = $(PKG_CPPFLAGS)" >> $(USER_CONF)
@@ -48,6 +52,7 @@ all: $(SHLIB)
 	@echo "PKG_LIBS = $(PKG_LIBS)" >> $(USER_CONF)
 
 $(SHLIB): $(OBJECTS)
+
 
 clean:
 	@rm -rf *.o *.d *.rc *.so *.dylib *.dll *.a *.lib \
