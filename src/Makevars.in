@@ -1,11 +1,4 @@
-### PETSc stuff
-#export PETSC_DIR=/usr/lib/petsc
-#export PETSC_ARCH=
-#export PETSC_DIR=/home/mschmid3/Downloads/petsc-3.4.2/linux
-#export PETSC_ARCH=linux
-#include ${PETSC_DIR}/conf/variables
-#include ${PETSC_DIR}/conf/rules
-
+##################################################################
 
 ### Configuration
 SEXPTOOLS_CPPFLAGS = @SEXPTOOLS_CPPFLAGS@

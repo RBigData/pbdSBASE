@@ -6,10 +6,7 @@ R_SCMD="${R_HOME}/bin/Rscript -e"
 
 
 # SEXPtools
-#R_SEXPTOOLS=`${R_SCMD} "source('./R/get_lib.r');get.lib('R_SEXPTOOLS','"${R_ARCH}"')"`
-#SEXPTOOLS_LDFLAGS=${R_SEXPTOOLS}
-R_SEXPTOOLS=`${R_SCMD} "SEXPtools:::ldflags()"`
-SEXPTOOLS_LDFLAGS=${R_SEXPTOOLS}
+SEXPTOOLS_LDFLAGS=`${R_SCMD} "SEXPtools:::ldflags()"`
 SEXPTOOLS_CPPFLAGS=`${R_SCMD} "SEXPtools:::cppflags()"`
 
 
