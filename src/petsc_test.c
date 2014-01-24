@@ -1,6 +1,4 @@
 #include "sbase.h"
-#include <petscmat.h>
-
 #include <stdlib.h>
 
 
