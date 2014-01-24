@@ -5,19 +5,31 @@ SEXPTOOLS_CPPFLAGS = @SEXPTOOLS_CPPFLAGS@
 SEXPTOOLS_LDFLAGS = @SEXPTOOLS_LDFLAGS@
 
 SPMD_CPPFLAGS = @SPMD_CPPFLAGS@
-SPMD_LDFLAGS = @SPMD_LDFLAGS@ -lpetsc
+SPMD_LDFLAGS = @SPMD_LDFLAGS@
 
+
+### Welcome to the wonderful funtime of PETSc's ridiculous, nonstandard bullshit
 PETSC_DIR=@PETSC_DIR@
 PETSC_ARCH=@PETSC_ARCH@
 
 PETSC_CPPFLAGS="-I${PETSC_DIR}/include"
+PETSC_LDFLAGS="-lpetsc"
+
+#PETSC_CPPFLAGS="-I${PETSC_DIR}/include \
+#  -I${PETSC_DIR}/${PETSC_ARCH}/include"
+#PETSC_LDFLAGS="-L${PETSC_DIR}/${PETSC_ARCH}/lib/libpetsc.so"
+
+#include ${PETSC_DIR}/conf/variables
+#include ${PETSC_DIR}/conf/rules
+#include ${PETSC_DIR}/conf/test
+
 
 
 ### R package flags
 PKG_CPPFLAGS = $(SPMD_CPPFLAGS) $(SEXPTOOLS_CPPFLAGS) $(PETSC_CPPFLAGS)
 PKG_CFLAGS = -w
 PKG_FFLAGS = $(SAFE_FFLAGS) -w 
-PKG_LIBS = $(SEXPTOOLS_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS)
+PKG_LIBS = $(SEXPTOOLS_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS) $(PETSC_LDFLAGS)
 
 
 ### Setup R source code and objects.

@@ -5,22 +5,24 @@ AC_INIT(DESCRIPTION)
 R_SCMD="${R_HOME}/bin/Rscript -e"
 
 
-# SEXPtools
+### SEXPtools
 SEXPTOOLS_LDFLAGS=`${R_SCMD} "SEXPtools:::ldflags()"`
 SEXPTOOLS_CPPFLAGS=`${R_SCMD} "SEXPtools:::cppflags()"`
 
 
-# pbdMPI
+### pbdMPI
 SPMD_CPPFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_CPPFLAGS','"${R_ARCH}"')"`
 SPMD_LDFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_LIBS','"${R_ARCH}"')"`
 
 
-# PETSc
+### PETSc ### FIXME
 PETSC_DIR=/usr/lib/petsc
 PETSC_ARCH=""
+#PETSC_DIR=${HOME}/Downloads/petsc-3.4.2/linux
+#PETSC_ARCH=linux
 
 
-# Report
+### Report
 echo " "
 echo "***************** Results of pbdSBASE package configure *****************"
 echo " "
@@ -35,7 +37,7 @@ echo "*************************************************************************"
 echo " "
 
 
-# Substitute templates
+### Substitute templates
 AC_SUBST(SEXPTOOLS_CPPFLAGS)
 AC_SUBST(SEXPTOOLS_LDFLAGS)
 AC_SUBST(SPMD_CPPFLAGS)

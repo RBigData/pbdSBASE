@@ -13,9 +13,12 @@
 #include <SEXPtools.h>
 
 
+// ----------------------------------------------------
 // Convert R storage to PETSc MPIAIJ storage
+// ----------------------------------------------------
+
 #if 0
-SEXP sbase_convert_r_to_petsc(SEXP x, SEXP dim)
+Mat sbase_convert_r_to_petsc(SEXP dim, SEXP data, SEXP row_ptr, SEXP col_ind)
 {
   Mat                 mat;
   PetscErrorCode      ierr;
@@ -33,22 +36,19 @@ SEXP sbase_convert_r_to_petsc(SEXP x, SEXP dim)
   
   ierr = MatSetUp(mat);CHKERRQ(ierr);
   ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);
-  for (i=rstart; i<rend; i+=2) {
-    for (j=0; j<n; j+=2) {
-      v = 10.0*i+j;
+  for (i=rstart; i<rend; i+=2) 
+  {
+    for (j=0; j<n; j++)
       ierr = MatSetValues(mat,1,&i,1,&j,&v,INSERT_VALUES);CHKERRQ(ierr);
-    }
   }
   ierr = MatAssemblyBegin(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
   ierr = MatAssemblyEnd(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
   
   
-  
-  
-  
   return mat;
 }
 #endif
+
 
 
 // ----------------------------------------------------
@@ -132,15 +132,15 @@ PetscErrorCode sbase_convert_petsc_to_r_data(Mat mat, SEXP *R_data, SEXP *R_data
 
 SEXP sbase_convert_petsc_to_r(Mat mat)
 {
-  SEXP R_data, R_data_rows, R_data_cols;
+  SEXP data, row_ptr, col_ind;
   SEXP R_list, R_list_names;
   
 /*  MatView(mat,PETSC_VIEWER_STDOUT_WORLD);*/
   
-  sbase_convert_petsc_to_r_data(mat, &R_data, &R_data_rows, &R_data_cols);
+  sbase_convert_petsc_to_r_data(mat, &data, &row_ptr, &col_ind);
   
-  R_list_names = make_list_names(3, "Data", "rows", "cols");
-  R_list = make_list(R_list_names, R_data, R_data_rows, R_data_cols);
+  R_list_names = make_list_names(3, "Data", "row_ptr", "col_ind");
+  R_list = make_list(R_list_names, data, row_ptr, col_ind);
   
   return R_list;
 /*  return R_data;*/
