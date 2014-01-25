@@ -15,11 +15,14 @@ SPMD_CPPFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_CPPFLAGS','"${R
 SPMD_LDFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_LIBS','"${R_ARCH}"')"`
 
 
-### PETSc ### FIXME
+# FIXME
+### PETSc 
 PETSC_DIR=/usr/lib/petsc
 PETSC_ARCH=""
 #PETSC_DIR=${HOME}/Downloads/petsc-3.4.2/linux
 #PETSC_ARCH=linux
+
+SLEPC_DIR=/usr/lib/slepc
 
 
 ### Report
@@ -44,5 +47,6 @@ AC_SUBST(SPMD_CPPFLAGS)
 AC_SUBST(SPMD_LDFLAGS)
 AC_SUBST(PETSC_DIR)
 AC_SUBST(PETSC_ARCH)
+AC_SUBST(SLEPC_DIR)
 
 AC_OUTPUT(src/Makevars)

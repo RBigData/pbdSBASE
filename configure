@@ -584,6 +584,7 @@ PACKAGE_URL=
 ac_unique_file="DESCRIPTION"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+SLEPC_DIR
 PETSC_ARCH
 PETSC_DIR
 SPMD_LDFLAGS
@@ -1680,11 +1681,14 @@ SPMD_CPPFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_CPPFLAGS','"${R
 SPMD_LDFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_LIBS','"${R_ARCH}"')"`
 
 
-### PETSc ### FIXME
+# FIXME
+### PETSc
 PETSC_DIR=/usr/lib/petsc
 PETSC_ARCH=""
 #PETSC_DIR=${HOME}/Downloads/petsc-3.4.2/linux
 #PETSC_ARCH=linux
+
+SLEPC_DIR=/usr/lib/slepc
 
 
 ### Report
@@ -1703,6 +1707,7 @@ echo " "
 
 
 ### Substitute templates
+
 
 
 
