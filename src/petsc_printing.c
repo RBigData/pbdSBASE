@@ -6,7 +6,6 @@
 
 
 #include "sbase.h"
-#include <petscmat.h>
 
 
 // Print format for matrices
@@ -26,7 +25,7 @@
 #define SBASE_MATPRINT_LG 12
 #define SBASE_MATPRINT_CONTOUR 13
 
-SEXP sbase_petsc_matprinter(SEXP fmt)
+SEXP sbase_petsc_matprinter_fmt(SEXP fmt)
 {
   PetscErrorCode ierr;
   
@@ -61,5 +60,25 @@ SEXP sbase_petsc_matprinter(SEXP fmt)
   
   CHKERRQ(ierr);
   
-  R_ret_0;
+  return RNULL;
 }
+
+
+
+SEXP sbase_petsc_matprinter(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP col_ind)
+{
+  Mat mat;
+  PetscErrorCode ierr;
+  
+  // Convert to PETSc storage
+  mat = sbase_convert_r_to_petsc(dim, ldim, data, row_ptr, col_ind);
+  
+  // Print
+  MatView(mat, PETSC_VIEWER_STDOUT_WORLD);
+  
+  // destroy petsc matrix
+  if (mat) {ierr = MatDestroy(&mat);CHKERRQ(ierr);}
+  
+  return RNULL;
+}
+

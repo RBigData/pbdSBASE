@@ -40,6 +40,7 @@ PKG_LIBS = $(SEXPTOOLS_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS) $(PETSC_LDFLAGS) $(SLEP
 
 ### Setup R source code and objects.
 R_OBJS = \
+	petsc_blas.o \
 	petsc_converters.o \
 	petsc_init.o \
 	petsc_printing.o \

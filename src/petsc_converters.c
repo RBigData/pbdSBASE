@@ -24,6 +24,7 @@ Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP 
   int           M = INT(dim, 0), N = INT(dim, 1);
   int c = 0, r = 0, diff;
   
+  n = PETSC_DECIDE; // FIXME why does this work...?
   
   PROTECT(row_ptr);
   PROTECT(col_ind);
@@ -32,10 +33,6 @@ Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP 
     INT(row_ptr, i) = INT(row_ptr, i)-1;
   for (i=0; i<LENGTH(col_ind); i++)
     INT(col_ind, i) = INT(col_ind, i)-1;
-  
-  PRINT(row_ptr);
-  PRINT(col_ind);
-  PRINT(data);
   
   ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);
   ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);
@@ -126,6 +123,7 @@ PetscErrorCode sbase_convert_petsc_to_r_data(Mat mat, SEXP *R_data, SEXP *R_data
     ierr = MatRestoreRow(mat, row, &ncols, &cols, NULL);CHKERRQ(ierr);
   }
   
+  
   PROTECT(*R_data = allocVector(REALSXP, len));
   for (j=0; j<len; j++)
     REAL(*R_data)[j] = 0.;
@@ -181,7 +179,6 @@ SEXP sbase_convert_petsc_to_r(Mat mat)
   SEXP data, row_ptr, col_ind;
   SEXP R_list, R_list_names;
   
-/*  MatView(mat,PETSC_VIEWER_STDOUT_WORLD);*/
   
   sbase_convert_petsc_to_r_data(mat, &data, &row_ptr, &col_ind);
   
