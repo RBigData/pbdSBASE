@@ -16,8 +16,8 @@
 
 
 // petsc_converters.c
-Mat sbase_convert_r_to_petsc(SEXP dim, SEXP data, SEXP row_ptr, SEXP col_ind);
 SEXP sbase_convert_petsc_to_r(Mat mat);
+Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP col_ind);
 
 
 #endif

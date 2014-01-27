@@ -2,10 +2,44 @@
 #include <stdlib.h>
 
 
-SEXP sbase_convert_petsc_to_r(Mat mat);
+SEXP sbase_petsc_test_rmat(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP col_ind)
+{
+  SEXP rmat;
+  Mat mat;
+  PetscErrorCode ierr;
+  
+  
+  // build petsc matrix
+  sbase_convert_r_to_petsc(dim, ldim, data, row_ptr, col_ind);
+  
+  // Print matrix with petsc printer
+  ierr  = MatView(mat,PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);
+  
+  // Recreate R matrix
+  rmat = sbase_convert_petsc_to_r(mat);
+  
+  // destroy petsc matrix
+  if (mat)  {ierr = MatDestroy(&mat);CHKERRQ(ierr);}
+  
+  return rmat;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // test
+#if 0
 SEXP sbase_petsc_test()
 {
   SEXP dense_mat;
@@ -106,7 +140,7 @@ SEXP sbase_petsc_test()
   
   return dense_mat;
 }
-
+#endif
 
 
 

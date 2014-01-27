@@ -3,14 +3,6 @@ library(pbdDMAT, quietly=TRUE)
 init()
 
 
-petsc_init()
-
-petsc_matprinter("default")
-petsc_test()
-
-petsc_finalize()
-
-
 m <- 9
 n <- 8
 x <- matrix(c(
@@ -30,10 +22,40 @@ x <- matrix(c(
 #pbdDMAT:::convert_dense_to_csr(x)
 
 
-l <- pbdDMAT:::convert_dense_to_csr(x)
-y <- pbdDMAT:::convert_csr_to_dense(dim(x), l$Data, l$row_ptr, l$col_ind)
+#l <- pbdDMAT:::convert_dense_to_csr(x)
+#y <- pbdDMAT:::convert_csr_to_dense(dim(x), l$Data, l$row_ptr, l$col_ind)
 
-all.equal(x, y)
+#all.equal(x, y)
+
+
+
+
+
+petsc_init()
+
+
+
+
+petsc_matprinter("matlab")
+
+l <- pbdDMAT:::convert_dense_to_csr(x)
+petsc_test_rmat(dim(x), dim(x), l$Data, l$row_ptr, l$col_ind)
+
+
+
+
+
+
+
+petsc_finalize()
+
+
+
+
+
+
+
+
 
 
 

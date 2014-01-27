@@ -13,37 +13,76 @@
 // Convert R storage to PETSc MPIAIJ storage
 // ----------------------------------------------------
 
-#if 0
-Mat sbase_convert_r_to_petsc(SEXP dim, SEXP data, SEXP row_ptr, SEXP col_ind)
+Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP col_ind)
 {
   Mat                 mat;
   PetscErrorCode      ierr;
-  const int           m = nrow(x), n = ncol(x);
-  const int           M = INTEGER(dim)[0], N = INTEGER(dim)[1];
+  int rstart, rend;
+  int i, j;
+  double v;
+  int           m = INT(ldim, 0), n = INT(ldim, 1);
+  int           M = INT(dim, 0), N = INT(dim, 1);
+  int c = 0, r = 0, diff;
   
   
-  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);
-  ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);
-  
-  ierr = MatSetSizes(mat, m, n, N, M);CHKERRQ(ierr);
-  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);
+/*  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);*/
+/*  ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);*/
+/*  */
+/*  ierr = MatSetSizes(mat, m, n, M, N);CHKERRQ(ierr);*/
+/*  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);*/
   
 /*  ierr = MatMPIAIJSetPreallocation(mat, PetscInt d_nz,const PetscInt d_nnz[],PetscInt o_nz,const PetscInt o_nnz[]);*/
   
-  ierr = MatSetUp(mat);CHKERRQ(ierr);
-  ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);
-  for (i=rstart; i<rend; i+=2) 
-  {
-    for (j=0; j<n; j++)
-      ierr = MatSetValues(mat,1,&i,1,&j,&v,INSERT_VALUES);CHKERRQ(ierr);
-  }
-  ierr = MatAssemblyBegin(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
-  ierr = MatAssemblyEnd(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
+/*  ierr = MatSetUp(mat);CHKERRQ(ierr);*/
+/*  ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);*/
+  
+  PROTECT(row_ptr);
+  PROTECT(col_ind);
+  PROTECT(data);
+  for (i=0; i<LENGTH(row_ptr); i++)
+    INT(row_ptr, i) = INT(row_ptr, i)-1;
+  for (i=0; i<LENGTH(col_ind); i++)
+    INT(col_ind, i) = INT(col_ind, i)-1;
+  
+  PRINT(row_ptr);
+  PRINT(col_ind);
+  PRINT(data);
+  
+  MatCreateMPIAIJWithArrays(PETSC_COMM_WORLD, m, n, M, N, INTEGER(row_ptr), INTEGER(col_ind), REAL(data), &mat);
+  
+  UNPROTECT(3);
+  
+/*  i = 0;*/
+/*  while (r < m && INT(row_ptr, r) < INT(row_ptr, m))*/
+/*  {*/
+/*    diff = INT(row_ptr, r+1) - INT(row_ptr, r);*/
+/*    */
+/*    if (diff == 0)*/
+/*      goto increment;*/
+/*    else*/
+/*    {*/
+/*      while (diff)*/
+/*      {*/
+/*        j = INT(col_ind, c)-1;*/
+/*        v = DBL(data, c);*/
+/*        ierr = MatSetValues(mat,1,&i,1,&j,&v,INSERT_VALUES);CHKERRQ(ierr);*/
+/*        */
+/*        c++; // hehehe*/
+/*        diff--;*/
+/*      }*/
+/*    }*/
+/*    */
+/*    increment:*/
+/*      r++;*/
+/*      i++;*/
+/*  }*/
+  
+/*  ierr = MatAssemblyBegin(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);*/
+/*  ierr = MatAssemblyEnd(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);*/
   
   
   return mat;
 }
-#endif
 
 
 
