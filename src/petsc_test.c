@@ -10,7 +10,7 @@ SEXP sbase_petsc_test_rmat(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP co
   
   
   // build petsc matrix
-  sbase_convert_r_to_petsc(dim, ldim, data, row_ptr, col_ind);
+  mat = sbase_convert_r_to_petsc(dim, ldim, data, row_ptr, col_ind);
   
   // Print matrix with petsc printer
   ierr  = MatView(mat,PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);

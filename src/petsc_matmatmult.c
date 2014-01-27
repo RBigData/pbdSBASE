@@ -7,12 +7,23 @@
 
 #include "sbase.h"
 
-SEXP sbase_petsc_matmatmult(SEXP x, SEXP y)
+SEXP sbase_petsc_test_rmat(SEXP A_dim, SEXP A_ldim, SEXP A_data, SEXP A_row_ptr, SEXP A_col_ind)
 {
-  Mat mat;
-/*  mat = sbase_convert_r_to_petsc()*/
+  SEXP C_dim, C_ldim, C_data, C_row_ptr, C_col_ind;
+  Mat A_mat, B_mat, C_mat;
+  PetscErrorCode ierr;
   
-/*  ierr = MatMatMult(Mat A,Mat B,MatReuse scall,PetscReal fill,Mat *C);*/
   
-/*  sbase_convert_petsc_to_r(mat)*/
+  // build petsc matrix
+  mat = sbase_convert_r_to_petsc(dim, ldim, data, row_ptr, col_ind);
+  
+  
+  
+  // Recreate R matrix
+  rmat = sbase_convert_petsc_to_r(mat);
+  
+  // destroy petsc matrix
+  if (mat)  {ierr = MatDestroy(&mat);CHKERRQ(ierr);}
+  
+  return rmat;
 }

@@ -25,17 +25,6 @@ Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP 
   int c = 0, r = 0, diff;
   
   
-/*  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);*/
-/*  ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);*/
-/*  */
-/*  ierr = MatSetSizes(mat, m, n, M, N);CHKERRQ(ierr);*/
-/*  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);*/
-  
-/*  ierr = MatMPIAIJSetPreallocation(mat, PetscInt d_nz,const PetscInt d_nnz[],PetscInt o_nz,const PetscInt o_nnz[]);*/
-  
-/*  ierr = MatSetUp(mat);CHKERRQ(ierr);*/
-/*  ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);*/
-  
   PROTECT(row_ptr);
   PROTECT(col_ind);
   PROTECT(data);
@@ -48,10 +37,30 @@ Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP 
   PRINT(col_ind);
   PRINT(data);
   
-  MatCreateMPIAIJWithArrays(PETSC_COMM_WORLD, m, n, M, N, INTEGER(row_ptr), INTEGER(col_ind), REAL(data), &mat);
+  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);
+  ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);
+  
+  ierr = MatSetSizes(mat, m, n, M, N);CHKERRQ(ierr);
+  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);
+  
+  MatMPIAIJSetPreallocationCSR(mat, INTP(row_ptr), INTP(col_ind), DBLP(data));
+  
+  ierr = MatCreateMPIAIJWithArrays(PETSC_COMM_WORLD, m, n, M, N, INTP(row_ptr), INTP(col_ind), DBLP(data), &mat);CHKERRQ(ierr);
   
   UNPROTECT(3);
   
+  
+  
+/*  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);*/
+/*  ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);*/
+/*  */
+/*  ierr = MatSetSizes(mat, m, n, M, N);CHKERRQ(ierr);*/
+/*  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);*/
+/*  */
+/*  //ierr = MatMPIAIJSetPreallocation(mat, PetscInt d_nz,const PetscInt d_nnz[],PetscInt o_nz,const PetscInt o_nnz[]);*/
+/*  */
+/*  ierr = MatSetUp(mat);CHKERRQ(ierr);*/
+/*  ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);*/
 /*  i = 0;*/
 /*  while (r < m && INT(row_ptr, r) < INT(row_ptr, m))*/
 /*  {*/
@@ -65,6 +74,8 @@ Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP 
 /*      {*/
 /*        j = INT(col_ind, c)-1;*/
 /*        v = DBL(data, c);*/
+/*        */
+/*        printf("%d %d %f\n", i, j, v);*/
 /*        ierr = MatSetValues(mat,1,&i,1,&j,&v,INSERT_VALUES);CHKERRQ(ierr);*/
 /*        */
 /*        c++; // hehehe*/
@@ -76,7 +87,7 @@ Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP 
 /*      r++;*/
 /*      i++;*/
 /*  }*/
-  
+/*  */
 /*  ierr = MatAssemblyBegin(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);*/
 /*  ierr = MatAssemblyEnd(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);*/
   
