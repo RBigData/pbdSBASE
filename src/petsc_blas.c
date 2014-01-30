@@ -16,8 +16,8 @@ SEXP sbase_petsc_matmatmult(SEXP A_dim, SEXP A_ldim, SEXP A_data, SEXP A_row_ptr
   
   
   // Convert to PETSc storage
-  A = sbase_convert_r_to_petsc(A_dim, A_ldim, A_data, A_row_ptr, A_col_ind);
-  B = sbase_convert_r_to_petsc(B_dim, B_ldim, B_data, B_row_ptr, B_col_ind);
+  A = sbase_convert_rsparse_to_petscsparse(A_dim, A_ldim, A_data, A_row_ptr, A_col_ind);
+  B = sbase_convert_rsparse_to_petscsparse(B_dim, B_ldim, B_data, B_row_ptr, B_col_ind);
   
 /*  MatView(A,PETSC_VIEWER_STDOUT_WORLD);*/
   
@@ -25,7 +25,7 @@ SEXP sbase_petsc_matmatmult(SEXP A_dim, SEXP A_ldim, SEXP A_data, SEXP A_row_ptr
   
   
   // Convert to R storage
-  R_list = sbase_convert_petsc_to_r(C);
+  R_list = sbase_convert_petscsparse_to_rsparse(C);
   
   
   // destroy petsc matrix
@@ -49,12 +49,14 @@ SEXP sbase_petsc_mattranspose(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP
   
   
   // Convert to PETSc storage
-  mat = sbase_convert_r_to_petsc(dim, ldim, data, row_ptr, col_ind);
+  mat = sbase_convert_rsparse_to_petscsparse(dim, ldim, data, row_ptr, col_ind);
   
-  ierr = MatTranspose(mat, MAT_REUSE_MATRIX, &mat);
+/*  ierr = MatTranspose(mat, MAT_REUSE_MATRIX, &mat);*/
+  ierr = MatTranspose(mat, MAT_INITIAL_MATRIX, &mat);
+  
   
   // Convert to R storage
-  R_list = sbase_convert_petsc_to_r(mat);
+  R_list = sbase_convert_petscsparse_to_rsparse(mat);
   
   
   // destroy petsc matrix

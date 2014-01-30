@@ -21,15 +21,15 @@ petsc_matmatmult <- function(A_dim, A_ldim, A_data, A_row_ptr, A_col_ind, B_dim,
 
 
 
-petsc_mattranspose <- function(dim, ldim, data, row_ptr, col_ind)
+petsc_mattranspose <- function(dim, ldim, Data, row_ptr, col_ind)
 {
   storage.mode(dim) <- "integer"
   storage.mode(ldim) <- "integer"
-  storage.mode(data) <- "double"
+  storage.mode(Data) <- "double"
   storage.mode(row_ptr) <- "integer"
   storage.mode(col_ind) <- "integer"
   
-  out <- .Call("sbase_petsc_mattranspose", dim, ldim, data, row_ptr, col_ind, PACKAGE="pbdSBASE")
+  out <- .Call("sbase_petsc_mattranspose", dim, ldim, Data, row_ptr, col_ind, PACKAGE="pbdSBASE")
   
   return( out )
 }

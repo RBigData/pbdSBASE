@@ -71,7 +71,7 @@ SEXP sbase_petsc_matprinter(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP c
   PetscErrorCode ierr;
   
   // Convert to PETSc storage
-  mat = sbase_convert_r_to_petsc(dim, ldim, data, row_ptr, col_ind);
+  mat = sbase_convert_rsparse_to_petscsparse(dim, ldim, data, row_ptr, col_ind);
   
   // Print
   MatView(mat, PETSC_VIEWER_STDOUT_WORLD);

@@ -13,7 +13,7 @@
 // Convert R storage to PETSc MPIAIJ storage
 // ----------------------------------------------------
 
-Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP col_ind)
+Mat sbase_convert_rsparse_to_petscsparse(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP col_ind)
 {
   Mat                 mat;
   PetscErrorCode      ierr;
@@ -98,7 +98,7 @@ Mat sbase_convert_r_to_petsc(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP 
 // Convert PETSc MPIAIJ storage to R storage
 // ----------------------------------------------------
 
-PetscErrorCode sbase_convert_petsc_to_r_data(Mat mat, SEXP *R_data, SEXP *R_data_rows, SEXP *R_data_cols)
+PetscErrorCode sbase_convert_petscsparse_to_rsparse_data(Mat mat, SEXP *R_data, SEXP *R_data_rows, SEXP *R_data_cols)
 {
   Mat                 mat_local;
   PetscBool           get_row_check = PETSC_TRUE,
@@ -174,13 +174,13 @@ PetscErrorCode sbase_convert_petsc_to_r_data(Mat mat, SEXP *R_data, SEXP *R_data
 
 
 
-SEXP sbase_convert_petsc_to_r(Mat mat)
+SEXP sbase_convert_petscsparse_to_rsparse(Mat mat)
 {
   SEXP data, row_ptr, col_ind;
   SEXP R_list, R_list_names;
   
   
-  sbase_convert_petsc_to_r_data(mat, &data, &row_ptr, &col_ind);
+  sbase_convert_petscsparse_to_rsparse_data(mat, &data, &row_ptr, &col_ind);
   
   R_list_names = make_list_names(3, "Data", "row_ptr", "col_ind");
   R_list = make_list(R_list_names, data, row_ptr, col_ind);
