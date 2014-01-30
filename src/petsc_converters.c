@@ -10,19 +10,18 @@
 
 
 // ----------------------------------------------------
-// Convert R storage to PETSc MPIAIJ storage
+// Convert R CSR storage to PETSc MPIAIJ storage
 // ----------------------------------------------------
 
 Mat sbase_convert_rsparse_to_petscsparse(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP col_ind)
 {
   Mat                 mat;
   PetscErrorCode      ierr;
-  int rstart, rend;
-  int i, j;
-  double v;
-  int           m = INT(ldim, 0), n = INT(ldim, 1);
-  int           M = INT(dim, 0), N = INT(dim, 1);
-  int c = 0, r = 0, diff;
+  int                 rstart, rend, i, j;
+  double              v;
+  int                 m = INT(ldim, 0), n = INT(ldim, 1);
+  int                 M = INT(dim, 0), N = INT(dim, 1);
+/*  int                 c = 0, r = 0, diff;*/
   
   n = PETSC_DECIDE; // FIXME why does this work...?
   
@@ -47,47 +46,47 @@ Mat sbase_convert_rsparse_to_petscsparse(SEXP dim, SEXP ldim, SEXP data, SEXP ro
   UNPROTECT(3);
   
   
+#if 0
+  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);
+  ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);
   
-/*  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);*/
-/*  ierr = MatSetType(mat, MATMPIAIJ);CHKERRQ(ierr);*/
-/*  */
-/*  ierr = MatSetSizes(mat, m, n, M, N);CHKERRQ(ierr);*/
-/*  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);*/
-/*  */
-/*  //ierr = MatMPIAIJSetPreallocation(mat, PetscInt d_nz,const PetscInt d_nnz[],PetscInt o_nz,const PetscInt o_nnz[]);*/
-/*  */
-/*  ierr = MatSetUp(mat);CHKERRQ(ierr);*/
-/*  ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);*/
-/*  i = 0;*/
-/*  while (r < m && INT(row_ptr, r) < INT(row_ptr, m))*/
-/*  {*/
-/*    diff = INT(row_ptr, r+1) - INT(row_ptr, r);*/
-/*    */
-/*    if (diff == 0)*/
-/*      goto increment;*/
-/*    else*/
-/*    {*/
-/*      while (diff)*/
-/*      {*/
-/*        j = INT(col_ind, c)-1;*/
-/*        v = DBL(data, c);*/
-/*        */
-/*        printf("%d %d %f\n", i, j, v);*/
-/*        ierr = MatSetValues(mat,1,&i,1,&j,&v,INSERT_VALUES);CHKERRQ(ierr);*/
-/*        */
-/*        c++; // hehehe*/
-/*        diff--;*/
-/*      }*/
-/*    }*/
-/*    */
-/*    increment:*/
-/*      r++;*/
-/*      i++;*/
-/*  }*/
-/*  */
-/*  ierr = MatAssemblyBegin(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);*/
-/*  ierr = MatAssemblyEnd(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);*/
+  ierr = MatSetSizes(mat, m, n, M, N);CHKERRQ(ierr);
+  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);
   
+  //ierr = MatMPIAIJSetPreallocation(mat, PetscInt d_nz,const PetscInt d_nnz[],PetscInt o_nz,const PetscInt o_nnz[]);
+  
+  ierr = MatSetUp(mat);CHKERRQ(ierr);
+  ierr = MatGetOwnershipRange(mat,&rstart,&rend);CHKERRQ(ierr);
+  i = 0;
+  while (r < m && INT(row_ptr, r) < INT(row_ptr, m))
+  {
+    diff = INT(row_ptr, r+1) - INT(row_ptr, r);
+    
+    if (diff == 0)
+      goto increment;
+    else
+    {
+      while (diff)
+      {
+        j = INT(col_ind, c)-1;
+        v = DBL(data, c);
+        
+        printf("%d %d %f\n", i, j, v);
+        ierr = MatSetValues(mat,1,&i,1,&j,&v,INSERT_VALUES);CHKERRQ(ierr);
+        
+        c++; // hehehe
+        diff--;
+      }
+    }
+    
+    increment:
+      r++;
+      i++;
+  }
+  
+  ierr = MatAssemblyBegin(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
+  ierr = MatAssemblyEnd(mat,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
+#endif
   
   return mat;
 }
@@ -95,7 +94,7 @@ Mat sbase_convert_rsparse_to_petscsparse(SEXP dim, SEXP ldim, SEXP data, SEXP ro
 
 
 // ----------------------------------------------------
-// Convert PETSc MPIAIJ storage to R storage
+// Convert PETSc MPIAIJ storage to R CSR storage
 // ----------------------------------------------------
 
 PetscErrorCode sbase_convert_petscsparse_to_rsparse_data(Mat mat, SEXP *R_data, SEXP *R_data_rows, SEXP *R_data_cols)
@@ -187,6 +186,67 @@ SEXP sbase_convert_petscsparse_to_rsparse(Mat mat)
   
   return R_list;
 /*  return R_data;*/
+}
+
+
+
+// ----------------------------------------------------
+// Convert dense R storage to PETSc MPIDENSE storage
+// ----------------------------------------------------
+
+Mat sbase_convert_rdense_to_petscdense(SEXP dim, SEXP ldim, SEXP Data)
+{
+  Mat                 mat;
+  PetscErrorCode      ierr;
+  int                 rstart, rend, i, j;
+  double              v;
+  int                 m = INT(ldim, 0), n = INT(ldim, 1);
+  int                 M = INT(dim, 0), N = INT(dim, 1);
+  int                 c = 0, r = 0, diff;
+  
+/*  n = PETSC_DECIDE;*/
+  
+  
+  ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);
+  ierr = MatSetType(mat, MATMPIDENSE);CHKERRQ(ierr);
+  
+  ierr = MatSetSizes(mat, m, n, M, N);CHKERRQ(ierr);
+  ierr = MatSetFromOptions(mat);CHKERRQ(ierr);
+  
+  ierr = MatMPIDenseSetPreallocation(mat, REAL(Data));CHKERRQ(ierr);
+  
+  return mat;
+}
+
+
+// ----------------------------------------------------
+// Convert PETSc MPIDENSE storage to dense R storage
+// ----------------------------------------------------
+
+SEXP sbase_convert_petscdense_to_rdense(Mat mat)
+{
+  Mat                 mat_local;
+  SEXP                dense_mat;
+  PetscErrorCode      ierr;
+  int                 i, j, m, n;
+  double              v;
+  
+  
+  R_INIT;
+  ierr = MatGetLocalSize(mat, &m, &n);CHKERRQ(ierr);
+  ierr = MatDenseGetLocalMatrix(mat, &mat_local);
+/*  ierr = MatDenseGetArray(Mat A, PetscScalar **array);*/
+  
+  newRmat(dense_mat, m, n, "dbl");
+  
+  for (j=0; j<n; j++)
+  {
+    for (i=0; i<m; i++)
+      MatDBL(dense_mat, i, j) =  MatGetValues(mat_local, m, &i, n, &j, &v);
+  }
+  
+  R_END;
+  return dense_mat;
 }
 
 
