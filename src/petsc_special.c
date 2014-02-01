@@ -9,7 +9,7 @@
 
 
 // does what it says
-Mat sbase_petsc_identity_dense(Mat *identity, int m, int n, int M, int N)
+PetscErrorCode sbase_petsc_identity_dense(Mat *identity, int m, int n, int M, int N)
 {
   PetscErrorCode ierr;
   MatFactorInfo info;
@@ -19,7 +19,7 @@ Mat sbase_petsc_identity_dense(Mat *identity, int m, int n, int M, int N)
   
   
   ierr = MatCreate(PETSC_COMM_WORLD, identity);CHKERRQ(ierr);
-  ierr = MatSetType(identity, MATMPIDENSE);CHKERRQ(ierr);
+  ierr = MatSetType(*identity, MATMPIDENSE);CHKERRQ(ierr);
   
   ierr = MatSetSizes(*identity, m, n, M, N);CHKERRQ(ierr);
   ierr = MatSetFromOptions(*identity);CHKERRQ(ierr);
@@ -27,9 +27,9 @@ Mat sbase_petsc_identity_dense(Mat *identity, int m, int n, int M, int N)
 /*  ierr = MatGetOwnershipRange(*identity, &rstart, &rend);CHKERRQ(ierr);*/
   ierr = MatSetUp(*identity);CHKERRQ(ierr);
   
-  for (j=0; j<1; j++)
+  for (j=0; j<N; j++)
   {
-    for (i=0; i<1; i++)
+    for (i=0; i<N; i++)
     {
       if (i == j)
         v = 1.0;
@@ -45,7 +45,7 @@ Mat sbase_petsc_identity_dense(Mat *identity, int m, int n, int M, int N)
   
   ierr  = MatView(*identity, PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);
   
-  return identity;
+  PetscFunctionReturn(0);
 }
 
 

@@ -48,8 +48,8 @@ SEXP sbase_petsc_matinvert(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP co
   
   
   // Invert
-  MatLUFactor(A, row, col, &info);
-  MatMatSolve(A, B, X);
+  ierr = MatLUFactor(A, row, col, &info);CHKERRQ(ierr);
+  ierr = MatMatSolve(A, B, X);CHKERRQ(ierr);
   
   
   // Convert back

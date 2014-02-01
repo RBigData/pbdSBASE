@@ -165,10 +165,8 @@ PetscErrorCode sbase_convert_petscsparse_to_rsparse_data(Mat mat, SEXP *R_data, 
   MatDestroy(&mat_local);
   
   
-  
-  
   UNPROTECT(3);
-  return ierr;
+  PetscFunctionReturn(0);
 }
 
 
