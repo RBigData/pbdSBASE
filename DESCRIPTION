@@ -13,7 +13,7 @@ Authors@R: c(person("Drew", "Schmidt", role = c("aut", "cre"), email =
 Description: Wrappers for PETSc.
 SystemRequirements: OpenMPI (>= 1.5.4) on Solaris, Linux and Mac,
         MPICH2 (>= 1.4.1p1) on Windows
-License: BSD 2-clause License
+License: BSD 2-clause License + file LICENSE
 NeedsCompilation: Yes
 URL: http://r-pbd.org/
 BugReports: http://group.r-pbd.org/
