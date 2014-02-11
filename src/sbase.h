@@ -2,11 +2,8 @@
 #define __SBASE_GLOBAL__
 
 
-#include <R.h>
-#include <Rinternals.h>
-#include <Rdefines.h>
-
 #include <SEXPtools.h>
+#include <Rdefines.h>
 
 #include <petscmat.h>
 

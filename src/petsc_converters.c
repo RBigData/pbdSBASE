@@ -180,7 +180,7 @@ SEXP sbase_convert_petscsparse_to_rsparse(Mat mat)
   sbase_convert_petscsparse_to_rsparse_data(mat, &data, &row_ptr, &col_ind);
   
   R_list_names = make_list_names(3, "Data", "row_ptr", "col_ind");
-  R_list = make_list(R_list_names, data, row_ptr, col_ind);
+  R_list = make_list(R_list_names, 3, data, row_ptr, col_ind);
   
   return R_list;
 /*  return R_data;*/
