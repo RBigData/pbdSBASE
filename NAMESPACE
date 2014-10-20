@@ -1,7 +1,8 @@
 useDynLib(pbdSBASE)
 
-import(methods, rlecuyer, pbdMPI, pbdSLAP)
+import(pbdMPI)
 
 # All internal functions
-exportPattern("^[[:alpha:]]+")
+exportPattern("^petsc_[[:alpha:]]+")
+exportPattern("^slepc_[[:alpha:]]+")
 
