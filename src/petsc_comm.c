@@ -2,10 +2,10 @@
  * License. If a copy of the this license was not distributed with this
  * file, you can obtain one from http://opensource.org/licenses/BSD-2-Clause. */
 
-// Copyright 2013, Schmidt
+// Copyright 2014, Schmidt
 
 
-#include "sbase.h"
+#include <RNACI.h>
 #include <petscmat.h>
 
 
@@ -16,7 +16,7 @@ SEXP sbase_petsc_init()
   
   ierr = PetscInitialize(0, NULL, NULL, NULL);CHKERRQ(ierr);
   
-  R_ret_0;
+  return RNULL;
 }
 
 // Calls MPI_Finalize() if MPI_Init() had not been called before PetscInitialize()
@@ -26,7 +26,7 @@ SEXP sbase_petsc_finalize()
   
   ierr = PetscFinalize();CHKERRQ(ierr);
   
-  R_ret_0;
+  return RNULL;
 }
 
 // Calls PetscFinalize() and ends the program
@@ -37,7 +37,7 @@ SEXP sbase_petsc_end()
   // Start petsc, calls MPI_Init()
   ierr = PetscEnd();CHKERRQ(ierr);
   
-  R_ret_0;
+  return RNULL;
 }
 
 
