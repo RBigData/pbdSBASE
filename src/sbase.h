@@ -2,7 +2,7 @@
 #define __SBASE_GLOBAL__
 
 
-#include <SEXPtools.h>
+#include <RNACI.h>
 #include <Rdefines.h>
 
 #include <petscmat.h>
