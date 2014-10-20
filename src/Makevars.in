@@ -1,8 +1,8 @@
 ##################################################################
 
 ### Configuration
-SEXPTOOLS_CPPFLAGS = @SEXPTOOLS_CPPFLAGS@
-SEXPTOOLS_LDFLAGS = @SEXPTOOLS_LDFLAGS@
+RNACI_CPPFLAGS = @RNACI_CPPFLAGS@
+RNACI_LDFLAGS = @RNACI_LDFLAGS@
 
 SPMD_CPPFLAGS = @SPMD_CPPFLAGS@
 SPMD_LDFLAGS = @SPMD_LDFLAGS@
@@ -12,44 +12,42 @@ SPMD_LDFLAGS = @SPMD_LDFLAGS@
 PETSC_DIR=@PETSC_DIR@
 PETSC_ARCH=@PETSC_ARCH@
 
-PETSC_CPPFLAGS="-I${PETSC_DIR}/include"
-PETSC_LDFLAGS="-lpetsc"
+PETSC_CPPFLAGS=-I${PETSC_DIR}/include -I${PETSC_DIR}/${PETSC_ARCH}/include
+PETSC_LDFLAGS=-L${PETSC_DIR}/${PETSC_ARCH}/lib/ -lpetsc
 
-#PETSC_CPPFLAGS="-I${PETSC_DIR}/include \
-#  -I${PETSC_DIR}/${PETSC_ARCH}/include"
-#PETSC_LDFLAGS="-L${PETSC_DIR}/${PETSC_ARCH}/lib/libpetsc.so"
-
-#include ${PETSC_DIR}/conf/variables
-#include ${PETSC_DIR}/conf/rules
-#include ${PETSC_DIR}/conf/test
 
 SLEPC_DIR=@SLEPC_DIR@
+SLEPC_ARCH=@SLEPC_ARCH@
 
-SLEPC_CPPFLAGS="-I${SLEPC_DIR}/include"
-SLEPC_LDFLAGS="-lslepc"
+SLEPC_CPPFLAGS=-I${SLEPC_DIR}/${SLEPC_ARCH}/include
+SLEPC_LDFLAGS=-L${SLEPC_DIR}/${SLEPC_ARCH}/lib -lslepc
 
 
 
 
 ### R package flags
-PKG_CPPFLAGS = $(SPMD_CPPFLAGS) $(SEXPTOOLS_CPPFLAGS) $(PETSC_CPPFLAGS) $(SLEPC_CPPFLAGS)
+PKG_CPPFLAGS = $(SPMD_CPPFLAGS) $(RNACI_CPPFLAGS) $(PETSC_CPPFLAGS) $(SLEPC_CPPFLAGS)
 PKG_CFLAGS = -w
 PKG_FFLAGS = $(SAFE_FFLAGS) -w 
-PKG_LIBS = $(SEXPTOOLS_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS) $(PETSC_LDFLAGS) $(SLEPC_LDFLAGS)
+PKG_LIBS = $(RNACI_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS) $(PETSC_LDFLAGS) # $(SLEPC_LDFLAGS)
 
 
 ### Setup R source code and objects.
-R_OBJS = \
+PETSC_OBJS = \
 	petsc_blas.o \
+	petsc_comm.o \
 	petsc_converters.o \
-	petsc_init.o \
-    petsc_invert.o \
+	petsc_invert.o \
 	petsc_printing.o \
-    petsc_special.o
+	petsc_special.o
 
+SLEPC_OBJS = \
+	slepc_comm.o
+
+
+R_OBJS = $(PETSC_OBJS) # $(SLEPC_OBJS)
 
 OBJECTS = $(R_OBJS)
-
 
 
 ### Start making here.
@@ -60,4 +58,5 @@ $(SHLIB): $(OBJECTS)
 
 clean:
 	@rm -rf *.o *.d *.rc *.so *.dylib *.dll *.a *.lib \
-					Makedeps Makevars $(USER_CONF) $(SHLIB) $(OBJECTS) \
+					Makedeps Makevars $(USER_CONF) $(SHLIB) $(OBJECTS)
+

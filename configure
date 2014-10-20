@@ -584,13 +584,14 @@ PACKAGE_URL=
 ac_unique_file="DESCRIPTION"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+SLEPC_ARCH
 SLEPC_DIR
 PETSC_ARCH
 PETSC_DIR
 SPMD_LDFLAGS
 SPMD_CPPFLAGS
-SEXPTOOLS_LDFLAGS
-SEXPTOOLS_CPPFLAGS
+RNACI_LDFLAGS
+RNACI_CPPFLAGS
 target_alias
 host_alias
 build_alias
@@ -632,6 +633,8 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_petsc_home
+with_petsc_arch
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1239,6 +1242,12 @@ if test -n "$ac_init_help"; then
 
   cat <<\_ACEOF
 
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-petsc-home=PATH  PETSC_HOME
+  --with-petsc-arch=PATH  PETSC_ARCH
+
 Report bugs to the package provider.
 _ACEOF
 ac_status=$?
@@ -1667,46 +1676,67 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+
+### PETSc and SLEPc
+#PETSC_DIR=${HOME}/libs/petsc-3.5.2
+#PETSC_ARCH="."
+
+
+
+# Check whether --with-petsc-home was given.
+if test "${with_petsc_home+set}" = set; then :
+  withval=$with_petsc_home; PETSC_DIR=$withval
+fi
+
+
+# Check whether --with-petsc-arch was given.
+if test "${with_petsc_arch+set}" = set; then :
+  withval=$with_petsc_arch; PETSC_ARCH=$withval
+fi
+
+
+
+SLEPC_DIR=${HOME}/libs/slepc-3.4.3
+SLEPC_ARCH="linux"
+
+
+
+### RNACI and pbdMPI
 R_SCMD="${R_HOME}/bin/Rscript -e"
 
+RNACI_LDFLAGS=`${R_SCMD} "RNACI:::ldflags()"`
+RNACI_CPPFLAGS=`${R_SCMD} "RNACI:::cppflags()"`
 
-### SEXPtools
-SEXPTOOLS_LDFLAGS=`${R_SCMD} "SEXPtools:::ldflags()"`
-SEXPTOOLS_CPPFLAGS=`${R_SCMD} "SEXPtools:::cppflags()"`
-
-
-### pbdMPI
 SPMD_CPPFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_CPPFLAGS','"${R_ARCH}"')"`
 SPMD_LDFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_LIBS','"${R_ARCH}"')"`
-
-
-# FIXME
-### PETSc
-PETSC_DIR=/usr/lib/petsc
-PETSC_ARCH=""
-#PETSC_DIR=${HOME}/Downloads/petsc-3.4.2/linux
-#PETSC_ARCH=linux
-
-SLEPC_DIR=/usr/lib/slepc
 
 
 ### Report
 echo " "
 echo "***************** Results of pbdSBASE package configure *****************"
 echo " "
-echo ">> SEXPTOOLS_CPPFLAGS = ${SEXPTOOLS_CPPFLAGS}"
-echo ">> SEXPTOOLS_LDFLAGS = ${SEXPTOOLS_LDFLAGS}"
+echo ">> RNACI_CPPFLAGS = ${RNACI_CPPFLAGS}"
+echo ">> RNACI_LDFLAGS = ${RNACI_LDFLAGS}"
 echo ">> SPMD_CPPFLAGS = ${SPMD_CPPFLAGS}"
 echo ">> SPMD_LDFLAGS = ${SPMD_LDFLAGS}"
 echo ">> PETSC_DIR = ${PETSC_DIR}"
 echo ">> PETSC_ARCH = ${PETSC_ARCH}"
+echo ">> SLEPC_DIR = ${SLEPC_DIR}"
+echo ">> SLEPC_ARCH = ${SLEPC_ARCH}"
 echo " "
 echo "*************************************************************************"
 echo " "
 
 
 ### Substitute templates
+
 
 
 
@@ -2871,4 +2901,5 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
+
 
