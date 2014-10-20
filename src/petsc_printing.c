@@ -2,28 +2,27 @@
  * License. If a copy of the this license was not distributed with this
  * file, you can obtain one from http://opensource.org/licenses/BSD-2-Clause. */
 
-// Copyright 2013, Schmidt
+// Copyright 2014, Schmidt
 
 
 #include "sbase.h"
 
 
-// Print format for matrices
-// Apologies for the ugliness
-#define SBASE_MATPRINT_DEFAULT 0
-#define SBASE_MATPRINT_MATLAB 1
-#define SBASE_MATPRINT_DENSE 2
-#define SBASE_MATPRINT_IMPL 3
-#define SBASE_MATPRINT_INFO 4
-#define SBASE_MATPRINT_INFO_DETAIL 5
-#define SBASE_MATPRINT_COMMON 6
-#define SBASE_MATPRINT_INDEX 7
-#define SBASE_MATPRINT_SYMMODU 8
-#define SBASE_MATPRINT_VTK 9
-#define SBASE_MATPRINT_NATIVE 10
-#define SBASE_MATPRINT_BASIC 11
-#define SBASE_MATPRINT_LG 12
-#define SBASE_MATPRINT_CONTOUR 13
+// Print format for matrices.  Apologies for the ugliness
+#define SBASE_MATPRINT_DEFAULT      0
+#define SBASE_MATPRINT_MATLAB       1
+#define SBASE_MATPRINT_DENSE        2
+#define SBASE_MATPRINT_IMPL         3
+#define SBASE_MATPRINT_INFO         4
+#define SBASE_MATPRINT_INFO_DETAIL  5
+#define SBASE_MATPRINT_COMMON       6
+#define SBASE_MATPRINT_INDEX        7
+#define SBASE_MATPRINT_SYMMODU      8
+#define SBASE_MATPRINT_VTK          9
+#define SBASE_MATPRINT_NATIVE       10
+#define SBASE_MATPRINT_BASIC        11
+#define SBASE_MATPRINT_LG           12
+#define SBASE_MATPRINT_CONTOUR      13
 
 SEXP sbase_petsc_matprinter_fmt(SEXP fmt)
 {
