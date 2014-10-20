@@ -6,77 +6,64 @@
 
 
 #include "sbase.h"
+/*#define PM(id,rn) {id, #id, rn}*/
+#define PM(id,rn) {id, rn}
+
+struct printmap_s{
+  int id;
+/*  const char *petsc_name;*/
+  const char *Rname;
+};
+
+const static struct printmap_s printmap[] = 
+{
+  PM(PETSC_VIEWER_DEFAULT, "default"),
+  PM(PETSC_VIEWER_ASCII_MATLAB, "matlab"),
+  PM(PETSC_VIEWER_ASCII_DENSE, "dense"), 
+  PM(PETSC_VIEWER_ASCII_IMPL, "impl"), 
+  PM(PETSC_VIEWER_ASCII_INFO, "info"), 
+  PM(PETSC_VIEWER_ASCII_INFO_DETAIL, "info_detail"),
+  PM(PETSC_VIEWER_ASCII_COMMON, "common"), 
+  PM(PETSC_VIEWER_ASCII_INDEX, "index"), 
+  PM(PETSC_VIEWER_ASCII_SYMMODU, "symmodu"),
+  PM(PETSC_VIEWER_ASCII_VTK, "vtk"),
+  PM(PETSC_VIEWER_NATIVE, "native"),
+  PM(PETSC_VIEWER_DRAW_BASIC, "basic"),
+  PM(PETSC_VIEWER_DRAW_LG, "lg"),
+  PM(PETSC_VIEWER_DRAW_CONTOUR, "contour"),
+  {-1, NULL}
+};
 
 
-// Print format for matrices.  Apologies for the ugliness
-#define SBASE_MATPRINT_DEFAULT      0
-#define SBASE_MATPRINT_MATLAB       1
-#define SBASE_MATPRINT_DENSE        2
-#define SBASE_MATPRINT_IMPL         3
-#define SBASE_MATPRINT_INFO         4
-#define SBASE_MATPRINT_INFO_DETAIL  5
-#define SBASE_MATPRINT_COMMON       6
-#define SBASE_MATPRINT_INDEX        7
-#define SBASE_MATPRINT_SYMMODU      8
-#define SBASE_MATPRINT_VTK          9
-#define SBASE_MATPRINT_NATIVE       10
-#define SBASE_MATPRINT_BASIC        11
-#define SBASE_MATPRINT_LG           12
-#define SBASE_MATPRINT_CONTOUR      13
+
+SEXP sbase_petsc_printer_lookup_code(SEXP fmtnm)
+{
+  R_INIT;
+  SEXP fmt;
+  int i;
+  
+  newRvec(fmt, 1, "int");
+  
+  for (i=0; printmap[i].Rname != NULL; i++)
+  {
+    if (strcmp(STR(fmtnm), printmap[i].Rname) == 0)
+    {
+      INT(fmt) = printmap[i].id;
+      return fmt;
+    }
+  }
+  
+  R_END;
+  return RNULL;
+}
+
+
 
 SEXP sbase_petsc_matprinter_fmt(SEXP fmt)
 {
   PetscErrorCode ierr = 0;
   
-  switch (INT(fmt))
-  {
-  case SBASE_MATPRINT_DEFAULT:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT);
-    break;
-  case SBASE_MATPRINT_MATLAB:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_MATLAB);
-    break;
-  case SBASE_MATPRINT_DENSE:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_DENSE);
-    break;
-  case SBASE_MATPRINT_IMPL:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_IMPL);
-    break;
-  case SBASE_MATPRINT_INFO:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INFO);
-    break;
-  case SBASE_MATPRINT_INFO_DETAIL:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INFO_DETAIL);
-    break;
-  case SBASE_MATPRINT_COMMON:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_COMMON);
-    break;
-  case SBASE_MATPRINT_INDEX:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INDEX);
-    break;
-  case SBASE_MATPRINT_SYMMODU:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_SYMMODU);
-    break;
-  case SBASE_MATPRINT_VTK:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_VTK);
-    break;
-  case SBASE_MATPRINT_NATIVE:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_NATIVE);
-    break;
-  case SBASE_MATPRINT_BASIC:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_BASIC);
-    break;
-  case SBASE_MATPRINT_LG:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_LG);
-    break;
-  case SBASE_MATPRINT_CONTOUR:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_CONTOUR);
-    break;
-  default:
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT);
-    break;
-  }
-  
+  ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, INT(fmt));
   RCHKERRQ(ierr);
   
   return RNULL;
