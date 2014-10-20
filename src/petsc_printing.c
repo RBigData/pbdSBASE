@@ -28,36 +28,54 @@ SEXP sbase_petsc_matprinter_fmt(SEXP fmt)
 {
   PetscErrorCode ierr = 0;
   
-  if (INT(fmt, 0) == SBASE_MATPRINT_DEFAULT)
+  switch (INT(fmt))
+  {
+  case SBASE_MATPRINT_DEFAULT:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_MATLAB)
+    break;
+  case SBASE_MATPRINT_MATLAB:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_MATLAB);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_DENSE)
+    break;
+  case SBASE_MATPRINT_DENSE:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_DENSE);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_IMPL)
+    break;
+  case SBASE_MATPRINT_IMPL:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_IMPL);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_INFO)
+    break;
+  case SBASE_MATPRINT_INFO:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INFO);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_INFO_DETAIL)
+    break;
+  case SBASE_MATPRINT_INFO_DETAIL:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INFO_DETAIL);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_COMMON)
+    break;
+  case SBASE_MATPRINT_COMMON:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_COMMON);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_INDEX)
+    break;
+  case SBASE_MATPRINT_INDEX:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_INDEX);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_SYMMODU)
+    break;
+  case SBASE_MATPRINT_SYMMODU:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_SYMMODU);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_VTK)
+    break;
+  case SBASE_MATPRINT_VTK:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_ASCII_VTK);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_NATIVE)
+    break;
+  case SBASE_MATPRINT_NATIVE:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_NATIVE);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_BASIC)
+    break;
+  case SBASE_MATPRINT_BASIC:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_BASIC);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_LG)
+    break;
+  case SBASE_MATPRINT_LG:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_LG);
-  else if (INT(fmt, 0) == SBASE_MATPRINT_CONTOUR)
+    break;
+  case SBASE_MATPRINT_CONTOUR:
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_CONTOUR);
-  else
-    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_CONTOUR);
+    break;
+  default:
+    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT);
+    break;
+  }
   
   RCHKERRQ(ierr);
   
