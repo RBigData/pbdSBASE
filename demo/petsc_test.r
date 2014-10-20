@@ -19,22 +19,7 @@ x <- matrix(c(
 
 
 
-#pbdDMAT:::convert_dense_to_csr(x)
-
-
-#l <- pbdDMAT:::convert_dense_to_csr(x)
-#y <- pbdDMAT:::convert_csr_to_dense(dim(x), l$Data, l$row_ptr, l$col_ind)
-
-#all.equal(x, y)
-
-
-
-
-
 petsc_init()
-
-
-
 
 petsc_matprinter("matlab")
 
@@ -42,21 +27,7 @@ l <- pbdDMAT:::convert_dense_to_csr(x)
 petsc_test_rmat(dim(x), dim(x), l$Data, l$row_ptr, l$col_ind)
 
 
-
-
-
-
-
 petsc_finalize()
-
-
-
-
-
-
-
-
-
 
 
 finalize()
