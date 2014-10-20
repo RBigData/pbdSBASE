@@ -26,7 +26,7 @@
 
 SEXP sbase_petsc_matprinter_fmt(SEXP fmt)
 {
-  PetscErrorCode ierr;
+  PetscErrorCode ierr = 0;
   
   if (INT(fmt, 0) == SBASE_MATPRINT_DEFAULT)
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DEFAULT);
@@ -56,8 +56,10 @@ SEXP sbase_petsc_matprinter_fmt(SEXP fmt)
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_LG);
   else if (INT(fmt, 0) == SBASE_MATPRINT_CONTOUR)
     ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_CONTOUR);
+  else
+    ierr = PetscViewerSetFormat(PETSC_VIEWER_STDOUT_WORLD, PETSC_VIEWER_DRAW_CONTOUR);
   
-  CHKERRQ(ierr);
+  RCHKERRQ(ierr);
   
   return RNULL;
 }
@@ -76,7 +78,7 @@ SEXP sbase_petsc_matprinter(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP c
   MatView(mat, PETSC_VIEWER_STDOUT_WORLD);
   
   // destroy petsc matrix
-  if (mat) {ierr = MatDestroy(&mat);CHKERRQ(ierr);}
+  if (mat) {ierr = MatDestroy(&mat);RCHKERRQ(ierr);}
   
   return RNULL;
 }

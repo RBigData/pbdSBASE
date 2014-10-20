@@ -29,9 +29,9 @@ SEXP sbase_petsc_matmatmult(SEXP A_dim, SEXP A_ldim, SEXP A_data, SEXP A_row_ptr
   
   
   // destroy petsc matrix
-  if (A) {ierr = MatDestroy(&A);CHKERRQ(ierr);}
-  if (B) {ierr = MatDestroy(&B);CHKERRQ(ierr);}
-  if (C) {ierr = MatDestroy(&C);CHKERRQ(ierr);}
+  if (A) {ierr = MatDestroy(&A);RCHKERRQ(ierr);}
+  if (B) {ierr = MatDestroy(&B);RCHKERRQ(ierr);}
+  if (C) {ierr = MatDestroy(&C);RCHKERRQ(ierr);}
   
   
   return R_list;
@@ -60,7 +60,7 @@ SEXP sbase_petsc_mattranspose(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP
   
   
   // destroy petsc matrix
-  if (mat) {ierr = MatDestroy(&mat);CHKERRQ(ierr);}
+  if (mat) {ierr = MatDestroy(&mat);RCHKERRQ(ierr);}
   
   
   return R_list;

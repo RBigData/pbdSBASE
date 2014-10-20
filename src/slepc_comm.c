@@ -5,8 +5,7 @@
 // Copyright 2014, Schmidt
 
 
-#include <RNACI.h>
-#include <petscmat.h>
+#include "sbase.h"
 
 
 // Start petsc, calls MPI_Init()
@@ -14,7 +13,7 @@ SEXP sbase_slepc_init()
 {
   PetscErrorCode ierr;
   
-  ierr = SlepcInitialize(0, NULL, (char*)0, NULL);CHKERRQ(ierr);
+  ierr = SlepcInitialize(0, NULL, (char*)0, NULL);RCHKERRQ(ierr);
   
   return RNULL;
 }
@@ -24,7 +23,7 @@ SEXP sbase_slepc_finalize()
 {
   PetscErrorCode ierr;
   
-  ierr = SlepcFinalize();CHKERRQ(ierr);
+  ierr = SlepcFinalize();RCHKERRQ(ierr);
   
   return RNULL;
 }

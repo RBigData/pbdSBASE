@@ -18,14 +18,14 @@ PetscErrorCode sbase_petsc_identity_dense(Mat *identity, int m, int n, int M, in
   double v;
   
   
-  ierr = MatCreate(PETSC_COMM_WORLD, identity);CHKERRQ(ierr);
-  ierr = MatSetType(*identity, MATMPIDENSE);CHKERRQ(ierr);
+  ierr = MatCreate(PETSC_COMM_WORLD, identity);RCHKERRQ(ierr);
+  ierr = MatSetType(*identity, MATMPIDENSE);RCHKERRQ(ierr);
   
-  ierr = MatSetSizes(*identity, m, n, M, N);CHKERRQ(ierr);
-  ierr = MatSetFromOptions(*identity);CHKERRQ(ierr);
+  ierr = MatSetSizes(*identity, m, n, M, N);RCHKERRQ(ierr);
+  ierr = MatSetFromOptions(*identity);RCHKERRQ(ierr);
   
-/*  ierr = MatGetOwnershipRange(*identity, &rstart, &rend);CHKERRQ(ierr);*/
-  ierr = MatSetUp(*identity);CHKERRQ(ierr);
+/*  ierr = MatGetOwnershipRange(*identity, &rstart, &rend);RCHKERRQ(ierr);*/
+  ierr = MatSetUp(*identity);RCHKERRQ(ierr);
   
   for (j=0; j<N; j++)
   {
@@ -40,10 +40,10 @@ PetscErrorCode sbase_petsc_identity_dense(Mat *identity, int m, int n, int M, in
     }
   }
   
-  ierr = MatAssemblyBegin(*identity, MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
-  ierr = MatAssemblyEnd(*identity, MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
+  ierr = MatAssemblyBegin(*identity, MAT_FINAL_ASSEMBLY);RCHKERRQ(ierr);
+  ierr = MatAssemblyEnd(*identity, MAT_FINAL_ASSEMBLY);RCHKERRQ(ierr);
   
-  ierr  = MatView(*identity, PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);
+  ierr  = MatView(*identity, PETSC_VIEWER_STDOUT_WORLD);RCHKERRQ(ierr);
   
   PetscFunctionReturn(0);
 }

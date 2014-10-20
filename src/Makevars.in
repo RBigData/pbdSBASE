@@ -27,8 +27,7 @@ SLEPC_LDFLAGS=-L${SLEPC_DIR}/${SLEPC_ARCH}/lib -lslepc
 
 ### R package flags
 PKG_CPPFLAGS = $(SPMD_CPPFLAGS) $(RNACI_CPPFLAGS) $(PETSC_CPPFLAGS) $(SLEPC_CPPFLAGS)
-PKG_CFLAGS = -w
-PKG_FFLAGS = $(SAFE_FFLAGS) -w 
+#PKG_CFLAGS = -w
 PKG_LIBS = $(RNACI_LDFLAGS) $(FLIBS) $(SPMD_LDFLAGS) $(PETSC_LDFLAGS) # $(SLEPC_LDFLAGS)
 
 
@@ -37,7 +36,6 @@ PETSC_OBJS = \
 	petsc_blas.o \
 	petsc_comm.o \
 	petsc_converters.o \
-	petsc_invert.o \
 	petsc_printing.o \
 	petsc_special.o
 

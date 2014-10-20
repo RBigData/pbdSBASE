@@ -17,8 +17,7 @@ Mat sbase_convert_rsparse_to_petscsparse(SEXP dim, SEXP ldim, SEXP data, SEXP ro
 {
   Mat                 mat;
   PetscErrorCode      ierr;
-  int                 rstart, rend, i, j;
-  double              v;
+  int                 i;
   int                 m = INT(ldim, 0), n = INT(ldim, 1);
   int                 M = INT(dim, 0), N = INT(dim, 1);
 /*  int                 c = 0, r = 0, diff;*/
@@ -105,7 +104,7 @@ PetscErrorCode sbase_convert_petscsparse_to_rsparse_data(Mat mat, SEXP *R_data, 
                       symmetric = PETSC_FALSE;
   PetscInt            rstart, rend;
   PetscErrorCode      ierr;
-  PetscInt            row, ncols, nrows, n;
+  PetscInt            row, ncols, n;
   const PetscInt      *cols, *ia, *ja;
   const PetscScalar   *vals;
   int                 i, j;
@@ -196,11 +195,8 @@ Mat sbase_convert_rdense_to_petscdense(SEXP dim, SEXP ldim, SEXP Data)
 {
   Mat                 mat;
   PetscErrorCode      ierr;
-  int                 rstart, rend, i, j;
-  double              v;
   int                 m = INT(ldim, 0), n = INT(ldim, 1);
   int                 M = INT(dim, 0), N = INT(dim, 1);
-  int                 c = 0, r = 0, diff;
   
 /*  n = PETSC_DECIDE;*/
   
@@ -231,7 +227,7 @@ SEXP sbase_convert_petscdense_to_rdense(Mat mat)
   
   
   R_INIT;
-  ierr = MatGetLocalSize(mat, &m, &n);CHKERRQ(ierr);
+  ierr = MatGetLocalSize(mat, &m, &n);RCHKERRQ(ierr);
   ierr = MatDenseGetLocalMatrix(mat, &mat_local);
 /*  ierr = MatDenseGetArray(Mat A, PetscScalar **array);*/
   

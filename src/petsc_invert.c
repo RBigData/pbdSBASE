@@ -23,10 +23,7 @@ SEXP sbase_petsc_matinvert(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP co
   Mat A, B, X;
   PetscErrorCode ierr;
   MatFactorInfo info;
-  PetscInt rstart, rend;
-  IS row, col;
-  int i, j;
-  double v;
+  IS row = 0, col = 0;
   const int M = INT(dim, 0), N = INT(dim, 1);
 /*  const int m = PETSC_DECIDE, n = PETSC_DECIDE;*/
   const int m = INT(ldim, 0), n = INT(ldim, 1);
@@ -37,19 +34,19 @@ SEXP sbase_petsc_matinvert(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP co
   
   
   // Preallocate identity matrix B and solution matrix X
-  ierr = sbase_petsc_identity_dense(&B, m, n, M, N);CHKERRQ(ierr);
+  ierr = sbase_petsc_identity_dense(&B, m, n, M, N);RCHKERRQ(ierr);
   
   
-  ierr = MatCreate(PETSC_COMM_WORLD, &X);CHKERRQ(ierr);
-  ierr = MatSetType(X, MATMPIDENSE);CHKERRQ(ierr);
+  ierr = MatCreate(PETSC_COMM_WORLD, &X);RCHKERRQ(ierr);
+  ierr = MatSetType(X, MATMPIDENSE);RCHKERRQ(ierr);
   
-  ierr = MatSetSizes(X, m, n, M, N);CHKERRQ(ierr);
-  ierr = MatSetFromOptions(X);CHKERRQ(ierr);
+  ierr = MatSetSizes(X, m, n, M, N);RCHKERRQ(ierr);
+  ierr = MatSetFromOptions(X);RCHKERRQ(ierr);
   
   
   // Invert
-  ierr = MatLUFactor(A, row, col, &info);CHKERRQ(ierr);
-  ierr = MatMatSolve(A, B, X);CHKERRQ(ierr);
+  ierr = MatLUFactor(A, row, col, &info);RCHKERRQ(ierr);
+  ierr = MatMatSolve(A, B, X);RCHKERRQ(ierr);
   
   
   // Convert back
@@ -57,9 +54,9 @@ SEXP sbase_petsc_matinvert(SEXP dim, SEXP ldim, SEXP data, SEXP row_ptr, SEXP co
   
   
   // destroy petsc matrix
-  if (A) {ierr = MatDestroy(&A);CHKERRQ(ierr);}
-  if (B) {ierr = MatDestroy(&B);CHKERRQ(ierr);}
-  if (X) {ierr = MatDestroy(&X);CHKERRQ(ierr);}
+  if (A) {ierr = MatDestroy(&A);RCHKERRQ(ierr);}
+  if (B) {ierr = MatDestroy(&B);RCHKERRQ(ierr);}
+  if (X) {ierr = MatDestroy(&X);RCHKERRQ(ierr);}
   
   
   return R_mat;

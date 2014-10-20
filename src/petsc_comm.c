@@ -5,16 +5,15 @@
 // Copyright 2014, Schmidt
 
 
-#include <RNACI.h>
-#include <petscmat.h>
 
+#include "sbase.h"
 
 // Start petsc, calls MPI_Init()
 SEXP sbase_petsc_init()
 {
   PetscErrorCode ierr;
   
-  ierr = PetscInitialize(0, NULL, NULL, NULL);CHKERRQ(ierr);
+  ierr = PetscInitialize(0, NULL, NULL, NULL);RCHKERRQ(ierr);
   
   return RNULL;
 }
@@ -24,7 +23,7 @@ SEXP sbase_petsc_finalize()
 {
   PetscErrorCode ierr;
   
-  ierr = PetscFinalize();CHKERRQ(ierr);
+  ierr = PetscFinalize();RCHKERRQ(ierr);
   
   return RNULL;
 }
@@ -35,7 +34,7 @@ SEXP sbase_petsc_end()
   PetscErrorCode ierr;
   
   // Start petsc, calls MPI_Init()
-  ierr = PetscEnd();CHKERRQ(ierr);
+  ierr = PetscEnd();RCHKERRQ(ierr);
   
   return RNULL;
 }
