@@ -11,7 +11,7 @@
 #define R_ret_0 SEXP ret;PROTECT(ret=allocVector(INTSXP,1));INTEGER(ret)[0]=0;UNPROTECT(1);return ret
 #define RETSBASEERR   SEXP SBASEERRVAL;PROTECT(SBASEERRVAL=allocVector(INTSXP,1));INTEGER(SBASEERRVAL)[0]=SBASEERR;UNPROTECT(1);return SBASEERRVAL
 
-//#define RCHKERRQ(n)   do {if (PetscUnlikely(n)) return PetscError(PETSC_COMM_SELF,__LINE__,PETSC_FUNCTION_NAME,__FILE__,n,PETSC_ERROR_REPEAT," ");} while (0)
+// TODO add comm_error() call after RETSBASEERR call
 #define RCHKERRQ(n)   do { \
   if (PetscUnlikely(n)) { \
     PetscError(PETSC_COMM_SELF,__LINE__,PETSC_FUNCTION_NAME,__FILE__,n,PETSC_ERROR_REPEAT," "); \
@@ -55,21 +55,5 @@ SEXP sbase_slepc_init();
 SEXP sbase_slepc_finalize();
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

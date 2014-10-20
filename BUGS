@@ -1,0 +1,2 @@
+-running petsc_matprinter() twice segfaults for some reason
+-RCHKERRQ needs to throw an error()
