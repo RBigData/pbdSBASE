@@ -4,8 +4,9 @@ License: BSD 2-clause License + file LICENSE
 Title: Programming with Big Data -- Base Wrappers for Sparse Distributed Matrices 
 Description: Wrappers for sparse linear algebra with PETSc.
 Depends: R (>= 2.14.0), pbdMPI (>= 0.2-1), RNACI
-SystemRequirements: OpenMPI (>= 1.5.4) on Solaris, Linux and Mac,
-        MPICH2 (>= 1.4.1p1) on Windows
+SystemRequirements: OpenMPI (>= 1.5.4) on Solaris, Linux, Mac, and
+        FreeBSD. MS-MPI (Microsoft HPC Pack 2012 R2 MS-MPI
+        Redistributable Package) on Windows.
 LazyLoad: Yes
 LazyData: Yes
 NeedsCompilation: Yes
