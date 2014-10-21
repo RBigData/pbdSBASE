@@ -1,6 +1,7 @@
 library(pbdSBASE, quietly=TRUE)
 library(pbdDMAT, quietly=TRUE)
 init()
+petsc_init()
 
 
 m <- 9
@@ -18,8 +19,7 @@ x <- matrix(c(
             m, n, byrow=T)
 
 
-
-petsc_init()
+comm.print(x)
 
 petsc_matprinter("matlab")
 
