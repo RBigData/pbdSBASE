@@ -11,10 +11,9 @@ petsc_matmatmult <- function(A_dim, A_ldim, A_data, A_row_ptr, A_col_ind, B_dim,
   storage.mode(B_row_ptr) <- "integer"
   storage.mode(B_col_ind) <- "integer"
   
-  out <- .Call("sbase_petsc_matmatmult", 
+  out <- .Call(sbase_petsc_matmatmult, 
             A_dim, A_ldim, A_data, A_row_ptr, A_col_ind, 
-            B_dim, B_ldim, B_data, B_row_ptr, B_col_ind, 
-            PACKAGE="pbdSBASE")
+            B_dim, B_ldim, B_data, B_row_ptr, B_col_ind)
   
   return( out )
 }
@@ -29,7 +28,7 @@ petsc_mattranspose <- function(dim, ldim, Data, row_ptr, col_ind)
   storage.mode(row_ptr) <- "integer"
   storage.mode(col_ind) <- "integer"
   
-  out <- .Call("sbase_petsc_mattranspose", dim, ldim, Data, row_ptr, col_ind, PACKAGE="pbdSBASE")
+  out <- .Call(sbase_petsc_mattranspose, dim, ldim, Data, row_ptr, col_ind)
   
   return( out )
 }
