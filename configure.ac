@@ -53,9 +53,6 @@ SLEPC_ARCH="linux"
 ### RNACI and pbdMPI
 R_SCMD="${R_HOME}/bin/Rscript -e"
 
-RNACI_LDFLAGS=`${R_SCMD} "RNACI:::ldflags()"`
-RNACI_CPPFLAGS=`${R_SCMD} "RNACI:::cppflags()"`
-
 SPMD_CPPFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_CPPFLAGS','"${R_ARCH}"')"`
 SPMD_LDFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_LIBS','"${R_ARCH}"')"`
 
@@ -64,8 +61,6 @@ SPMD_LDFLAGS=`${R_SCMD} "source('./R/get_conf.r');get.conf('PKG_LIBS','"${R_ARCH
 echo " "
 echo "***************** Results of pbdSBASE package configure *****************"
 echo " "
-echo ">> RNACI_CPPFLAGS = ${RNACI_CPPFLAGS}"
-echo ">> RNACI_LDFLAGS = ${RNACI_LDFLAGS}"
 echo ">> SPMD_CPPFLAGS = ${SPMD_CPPFLAGS}"
 echo ">> SPMD_LDFLAGS = ${SPMD_LDFLAGS}"
 echo ">> PETSC_DIR = ${PETSC_DIR}"
@@ -78,8 +73,6 @@ echo " "
 
 
 ### Substitute templates
-AC_SUBST(RNACI_CPPFLAGS)
-AC_SUBST(RNACI_LDFLAGS)
 AC_SUBST(SPMD_CPPFLAGS)
 AC_SUBST(SPMD_LDFLAGS)
 AC_SUBST(PETSC_DIR)

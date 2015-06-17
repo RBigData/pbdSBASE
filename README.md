@@ -1,5 +1,10 @@
 # pbdSBASE
 
+* **Version:** 0.1-0
+* **License:** [![License](http://img.shields.io/badge/license-BSD%202--Clause-orange.svg?style=flat)](http://opensource.org/licenses/BSD-2-Clause)
+* **Author:** Drew Schmidt
+
+
 pbdSBASE is a set of low-level PETSc bindings and utility functions for 
 doing distributed sparse matrix computations in R.  For higher-level
 access, see the pbdDMAT package.
@@ -69,4 +74,10 @@ via:
 mpirun -np 2 Rscript sbase_example.r
 ```
 
+
+## Authors
+
+pbdDMAT is authored and maintained by the pbdR core team:
+* Drew Schmidt
+* Wei-Chen Chen
 
