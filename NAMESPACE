@@ -1,4 +1,9 @@
-useDynLib(pbdSBASE)
+useDynLib(pbdSBASE,
+  sbase_petsc_matmatmult, sbase_petsc_mattranspose, sbase_petsc_init, 
+  sbase_petsc_finalize, sbase_petsc_end, 
+  sbase_petsc_printer_lookup_code, sbase_petsc_matprinter_fmt,
+  sbase_petsc_matprinter
+)
 
 import(pbdMPI)
 

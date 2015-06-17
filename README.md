@@ -19,14 +19,12 @@ this and other matrix distributions.
 
 At this time, installation is non-trivial.  The basic steps are:
 
-1. Build PETSc with `mpicc -fPIC`.  This requires the use of PETSc's
+1. Build PETSc with `CC=mpicc -fPIC`.  This requires the use of PETSc's
 `PETSC_HOME` and `PETSC_ARCH` environment variables.  See official
 PETSc documentation for details.
 2. Assuming `PETSC_HOME` and `PETSC_ARCH` are set, build pbdSBASE via:
 
-```
-R CMD INSTALL sbase --configure-args="--with-petsc-home=${PETSC_HOME} --with-petsc-arch=${PETSC_ARCH}"
-```
+  `R CMD INSTALL sbase --configure-args="--with-petsc-home=${PETSC_HOME} --with-petsc-arch=${PETSC_ARCH}"`
 
 3. To run a program using pbdSBASE, make sure that you have 
 `${PETSC_HOME}/${PETSC_ARCH}/lib` in your `LD_LIBRARY_PATH`.

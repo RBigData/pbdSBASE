@@ -49,6 +49,7 @@ SEXP sbase_petsc_printer_lookup_code(SEXP fmtnm)
     if (strcmp(STR(fmtnm), printmap[i].Rname) == 0)
     {
       INT(fmt) = printmap[i].id;
+      UNPROTECT(1);
       return fmt;
     }
   }
